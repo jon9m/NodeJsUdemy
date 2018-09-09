@@ -1,18 +1,27 @@
 console.log('Starting app.js');
 
 const fs = require('fs');
-const os = require('os');
-const notes = require('./notes.js');
 const _ = require('lodash');
+const yargs = require('yargs');
 
-var user = os.userInfo();
-console.log(user);
+const notes = require('./notes.js');
 
-fs.appendFile('greetings.txt', `Starting NodeJS first app ${user.username} ! You are ${notes.age} years old \n`, function (err) { //`` - es6 template strings
-    if (err) {
-        console.log(err);
-    }
-});
+const argv = yargs.argv;
 
-var result = notes.addNumbers(3, 5, 7, -4, 3, 2, 1);
-console.log(result);
+console.log(argv);
+console.log(process.argv);
+
+// var command = process.argv[2];
+var command = argv._[0];
+
+if (command === 'add') {
+    notes.addNote(argv.title, argv.body);
+} else if (command === 'list') {
+    notes.getAll();
+} else if (command === 'read') {
+    notes.read();
+} else if (command === 'remove') {
+    notes.remove();
+} else {
+    console.log('command not recognized');
+}
